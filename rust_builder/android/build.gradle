@@ -38,6 +38,7 @@ android {
     // Replace it with a version number if this plugin requires a specfic NDK version.
     // (e.g. ndkVersion "23.1.7779620")
     ndkVersion android.ndkVersion
+    ndkVersion "27.0.12077973"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
