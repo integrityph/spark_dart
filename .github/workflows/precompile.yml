@@ -63,8 +63,8 @@ jobs:
       # Android build
       - name: Precompile (with Android)
         if: matrix.os == 'ubuntu-latest'
-        # Crucial: Using NDK 27+ ensures the 16KB page size alignment is preserved during any internal stripping
-        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart --android-sdk-location=/usr/local/lib/android/sdk --android-ndk-version=27.0.12077973 --android-min-sdk-version=23
+        # Crucial fix: The flag below is now --android-ndk-version= env.NDK_VERSION
+        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart --android-sdk-location=/usr/local/lib/android/sdk --android-ndk-version=${{ env.NDK_VERSION }} --android-min-sdk-version=23
         working-directory: ./build_tool
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
