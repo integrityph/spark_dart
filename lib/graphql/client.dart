@@ -343,7 +343,7 @@ class SspClient {
         queryPayload: lightningSendFeeEstimateQuery,
         variables: {
           'encoded_invoice': encodedInvoice,
-          'amount_sats': amountSats,
+          'amount_sats': amountSats?.toInt(),
         },
         constructObject: (response) => LightningSendFeeEstimateOutput.fromJson(
           response['lightning_send_fee_estimate'],
@@ -447,7 +447,7 @@ class SspClient {
         queryPayload: requestLightningSendMutation,
         variables: {
           'encoded_invoice': encodedInvoice,
-          'amount_sats': amountSats,
+          'amount_sats': amountSats?.toInt(),
           'user_outbound_transfer_external_id': userOutboundTransferExternalId,
         },
         constructObject: (response) => LightningSendRequest.fromJson(
@@ -470,8 +470,8 @@ class SspClient {
         queryPayload: requestSwapLeavesMutation,
         variables: {
           'adaptor_pubkey': adaptorPubkey,
-          'total_amount_sats': totalAmountSats,
-          'target_amount_sats': targetAmountSats,
+          'total_amount_sats': totalAmountSats.toInt(),
+          'target_amount_sats': targetAmountSats.map((v)=>v.toInt()).toList(),
           'fee_sats': feeSats,
           'user_leaves': userLeaves,
           'user_outbound_transfer_external_id': userOutboundTransferExternalId,
