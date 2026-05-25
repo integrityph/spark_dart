@@ -13,3 +13,19 @@ prost = "0.13"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+
+[target.aarch64-linux-android]
+rustflags = [
+    "-C",
+    "link-arg=-Wl,--hash-style=both",
+    "-C",
+    "link-arg=-Wl,-z,max-page-size=16384",
+]
+
+[target.x86_64-linux-android]
+rustflags = [
+    "-C",
+    "link-arg=-Wl,--hash-style=both",
+    "-C",
+    "link-arg=-Wl,-z,max-page-size=16384",
+]
