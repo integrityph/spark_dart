@@ -28,7 +28,7 @@ jobs:
       - name: Precompile (macOS & Windows)
         if: matrix.os == 'macOS-latest' || matrix.os == 'windows-latest'
         # Adjust --repository to your actual GitHub user/repo string
-        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=YOUR_GITHUB_USER/spark_dart
+        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart
         working-directory: ./build_tool
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
       - name: Precompile (with Android)
         if: matrix.os == 'ubuntu-latest'
         # Crucial: Using NDK 27+ ensures the 16KB page size alignment is preserved during any internal stripping
-        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=YOUR_GITHUB_USER/spark_dart --android-ndk-version=27.0.12077973 --android-min-sdk-version=23
+        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart --android-ndk-version=27.0.12077973 --android-min-sdk-version=23
         working-directory: ./build_tool
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
