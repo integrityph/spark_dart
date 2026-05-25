@@ -42,13 +42,22 @@ jobs:
       - name: Patch NDK 27 legacy symlinks for Cargokit
         if: matrix.os == 'ubuntu-latest'
         run: |
-          cd /usr/local/lib/android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin
-          # Recreate the legacy tool names Cargokit expects, pointing them to LLVM
+          # 1. Dynamically find the NDK 27 version currently installed on the GitHub Runner
+          NDK_VERSION=$(ls /usr/local/lib/android/sdk/ndk | grep "^27\." | head -n 1)
+          echo "Found NDK 27 Version: $NDK_VERSION"
+          
+          # 2. Save it to GITHUB_ENV so the Cargokit step can use it dynamically
+          echo "NDK_VERSION=$NDK_VERSION" >> $GITHUB_ENV
+          
+          # 3. Navigate into that specific NDK's bin folder
+          cd /usr/local/lib/android/sdk/ndk/$NDK_VERSION/toolchains/llvm/prebuilt/linux-x86_64/bin
+          
+          # 4. Recreate the legacy tool names, pointing them to LLVM safely
           for arch in arm-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android; do
-            sudo ln -s llvm-ar $arch-ar
-            sudo ln -s llvm-strip $arch-strip
-            sudo ln -s llvm-nm $arch-nm
-            sudo ln -s llvm-ranlib $arch-ranlib
+            sudo ln -sf llvm-ar $arch-ar
+            sudo ln -sf llvm-strip $arch-strip
+            sudo ln -sf llvm-nm $arch-nm
+            sudo ln -sf llvm-ranlib $arch-ranlib
           done
 
       # Android build
