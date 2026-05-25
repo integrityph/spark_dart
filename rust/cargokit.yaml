@@ -4,9 +4,9 @@ cargo:
   release:
     toolchain: stable
 
-# precompiled_binaries:
-#   # Uri prefix used when downloading precompiled binaries.
-#   url_prefix: https://github.com/integrityph/spark_dart/releases/download/precompiled_
+precompiled_binaries:
+  # Uri prefix used when downloading precompiled binaries.
+  url_prefix: https://github.com/integrityph/spark_dart/releases/download/precompiled_
 
-#   # Public key for verifying downloaded precompiled binaries.
-#   public_key: c5ce2e1c09735581703632603c4a207fa88fc03fd9723869e3e6af402caa8861
+  # Public key for verifying downloaded precompiled binaries.
+  public_key: 9192c0912aefb5af82958914db456842880852a53e6cd93a3fdae58cf875f428
