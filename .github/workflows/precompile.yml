@@ -39,10 +39,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PRIVATE_KEY: ${{ secrets.RELEASE_PRIVATE_KEY }}
           
+      - name: Patch NDK 27 legacy symlinks for Cargokit
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd /usr/local/lib/android/sdk/ndk/27.0.12077973/toolchains/llvm/prebuilt/linux-x86_64/bin
+          # Recreate the legacy tool names Cargokit expects, pointing them to LLVM
+          for arch in arm-linux-androideabi aarch64-linux-android i686-linux-android x86_64-linux-android; do
+            sudo ln -s llvm-ar $arch-ar
+            sudo ln -s llvm-strip $arch-strip
+            sudo ln -s llvm-nm $arch-nm
+            sudo ln -s llvm-ranlib $arch-ranlib
+          done
+
       # Android build
       - name: Precompile (with Android)
         if: matrix.os == 'ubuntu-latest'
         # Crucial: Using NDK 27+ ensures the 16KB page size alignment is preserved during any internal stripping
+        run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart --android-sdk-location=/usr/local/lib/android/sdk --android-ndk-version=27.0.12077973 --android-min-sdk-version=23
         run: dart run bin/build_tool.dart precompile-binaries -v --manifest-dir=../rust --repository=integrityph/spark_dart --android-sdk-location=/usr/local/lib/android/sdk --android-ndk-version=27.0.12077973 --android-min-sdk-version=23
         working-directory: ./build_tool
         env:
