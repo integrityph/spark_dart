@@ -2109,7 +2109,7 @@ class TransferService extends BaseTransferService {
           signingPublicKey: signingJob.signingPublicKey,
           verifyingKey: signingJob.verifyingKey,
           rawTx: signingJob.rawTx,
-          parentTxOut: signingJob.parentTxOut,
+          parentTxOut: signingJob.parentTxOut!,
           signingNonceCommitment: signingJob.signingNonceCommitment,
           signingNonceCommitments: signingNonceCommitments.map(
             (k, v) => MapEntry(
@@ -2195,7 +2195,7 @@ class TransferService extends BaseTransferService {
           signingPublicKey: signingJob.signingPublicKey,
           verifyingKey: signingJob.verifyingKey,
           rawTx: signingJob.rawTx,
-          parentTxOut: signingJob.parentTxOut,
+          parentTxOut: signingJob.parentTxOut!,
           signingNonceCommitment: signingJob.signingNonceCommitment,
           signingNonceCommitments: signingNonceCommitments.map(
             (k, v) => MapEntry(
@@ -2614,7 +2614,7 @@ class TransferService extends BaseTransferService {
           signingPublicKey: signingJob.signingPublicKey,
           verifyingKey: signingJob.verifyingKey,
           rawTx: signingJob.rawTx,
-          parentTxOut: signingJob.parentTxOut,
+          parentTxOut: signingJob.parentTxOut!,
           signingNonceCommitment: signingJob.signingNonceCommitment,
           signingNonceCommitments: signingNonceCommitments.map(
             (k, v) => MapEntry(

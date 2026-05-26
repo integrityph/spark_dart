@@ -730,7 +730,7 @@ class SigningService {
     for (final signingJob in signingJobs) {
       final rawTx = getTxFromRawTxBytes(signingJob.rawTx);
       final txOut = signingJob.parentTxOut;
-      final rawTxSighash = getSigHashFromTx(rawTx, 0, txOut);
+      final rawTxSighash = getSigHashFromTx(rawTx, 0, [txOut]);
 
       final userSignature = await config.signer.signFrost(
         SignFrostParams(
@@ -785,7 +785,7 @@ class FullSigningJobRequest {
   final Uint8List signingPublicKey;
   final Uint8List verifyingKey;
   final Uint8List rawTx;
-  final dynamic parentTxOut;
+  final TxOutput parentTxOut;
   final SigningCommitmentWithOptionalNonce signingNonceCommitment;
   final Map<String, SigningCommitment> signingNonceCommitments;
 
