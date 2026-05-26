@@ -9,7 +9,6 @@ import 'package:pointycastle/asn1/asn1_parser.dart';
 import 'package:pointycastle/asn1/primitives/asn1_bit_string.dart';
 import 'package:pointycastle/asn1/primitives/asn1_sequence.dart';
 import 'package:pointycastle/export.dart' hide Padding, State;
-import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 
 class SEHelper {
   static final BiometricSignature _biometricSignature = BiometricSignature();
@@ -193,10 +192,6 @@ class SEHelper {
         ),
       );
 
-      if (result.code == BiometricError.fallbackSelected) {
-        throw Exception('Fallback selected during key creation');
-      }
-
       if (result.code == BiometricError.success) {
         return result.decryptingPublicKey!;
       } else {
@@ -306,12 +301,6 @@ class SEHelper {
     BigInt result = BigInt.zero;
 
     for (final byte in val) {
-      // Shift the accumulated result left by 1 byte (8 bits)
-      // and combine it with the new byte using bitwise OR.
-      //
-      // We use & 0xff as a safety net to ensure we are strictly
-      // grabbing 8 unsigned bits, just in case a standard List<int>
-      // sneaks in a negative value or something larger than 255.
       result = (result << 8) | BigInt.from(byte & 0xff);
     }
 
