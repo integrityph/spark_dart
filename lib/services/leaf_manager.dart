@@ -1764,10 +1764,10 @@ class LeafManager {
             parentNode,
           );
           validNodes.add(renewedNode);
-        } catch (err) {
+        } catch (err, stack) {
           // Skip — don't let one failed renewal discard the rest.
           print(
-            "[LeafManager] renewRefundTxn failed for node ${node.id}: $err",
+            "[LeafManager] renewRefundTxn failed for node ${node.id}: $err\n${stack}",
           );
         }
       }());
