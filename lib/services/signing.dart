@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:bitcoin_base/bitcoin_base.dart';
+import 'package:convert/convert.dart';
+import 'package:flutter/foundation.dart';
 
 import '../errors/types.dart'; // SparkValidationError
 import '../src/proto/spark.pb.dart'
@@ -123,13 +125,6 @@ class SigningService {
   >
   _signRefundsCore(
     List<LeafKeyTweak> leaves,
-    // Future<({BtcTransaction cpfpRefundTx, BtcTransaction directRefundTx, BtcTransaction directFromCpfpRefundTx})> Function({
-    //   required dynamic nodeTx,
-    //   dynamic directNodeTx,
-    //   required int sequence,
-    //   required Uint8List receivingPubkey,
-    //   required dynamic network,
-    // }) createRefundTxs,
     Future<RefundTxs> Function(RefundTxWithSequenceParams) createRefundTxs,
     List<spark_pb.RequestedSigningCommitments> cpfpSigningCommitments,
     List<spark_pb.RequestedSigningCommitments> directSigningCommitments,
@@ -194,13 +189,17 @@ class SigningService {
         );
       }
 
+      final currentSequenceInt = Uint8List.fromList(
+            currentSequence,
+          ).buffer.asByteData(0).getUint32(0, Endian.little);
+
+      debugPrint("RefundTx before creating the next one: tx: ${hex.encode(leaf.leaf.refundTx)} currentSequence: ${currentSequence} currentSequenceInt: ${currentSequenceInt}");
+
       final refundTxs = await createRefundTxs(
         RefundTxWithSequenceParams(
           nodeTx: nodeTx,
           directNodeTx: directNodeTx,
-          sequence: Uint8List.fromList(
-            currentSequence,
-          ).buffer.asByteData(0).getUint32(0, Endian.little),
+          sequence: currentSequenceInt,
           receivingPubkey: receivingPubkey,
           network: config.getNetwork(),
         ),
