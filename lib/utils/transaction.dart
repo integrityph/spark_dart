@@ -3,6 +3,7 @@
 import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
+import 'package:flutter/foundation.dart';
 
 import '../errors/spark_error.dart'; // Adjust path for SparkValidationError
 import '../spark_bindings/spark_bindings.dart'; // Adjust path for getSparkFrost
@@ -501,24 +502,29 @@ TransactionSequence getNextTransactionSequence(
   final nextTimelock = currentTimelock - timeLockInterval;
   final isBit30Defined = currSequence & (1 << 30);
 
-  if (isNodeTx && nextTimelock < 0) {
-    throw SparkValidationError(
-      "timelock interval is less than 0",
-      context: {
-        'field': "nextTimelock",
-        'value': nextTimelock,
-        'expected': "Non-negative timelock interval",
-      },
-    );
-  } else if (!isNodeTx && nextTimelock <= 0) {
-    throw SparkValidationError(
-      "timelock interval is less than or equal to 0",
-      context: {
-        'field': "nextTimelock",
-        'value': nextTimelock,
-        'expected': "Timelock greater than 0",
-      },
-    );
+  try{
+    if (isNodeTx && nextTimelock < 0) {
+      throw SparkValidationError(
+        "timelock interval is less than 0",
+        context: {
+          'field': "nextTimelock",
+          'value': nextTimelock,
+          'expected': "Non-negative timelock interval",
+        },
+      );
+    } else if (!isNodeTx && nextTimelock <= 0) {
+      throw SparkValidationError(
+        "timelock interval is less than or equal to 0",
+        context: {
+          'field': "nextTimelock",
+          'value': nextTimelock,
+          'expected': "Timelock greater than 0",
+        },
+      );
+    }
+  } catch (e, stack) {
+    debugPrint("Catching the error to get the full stack $e\n${stack}");
+    rethrow;
   }
 
   return TransactionSequence(

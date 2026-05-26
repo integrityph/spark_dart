@@ -236,7 +236,7 @@ class SigningService {
       final sequnceInt = nodeTx.inputs.elementAtOrNull(0) != null
           ? Uint8List.fromList(
               nodeTx.inputs.elementAt(0).sequence,
-            ).buffer.asByteData(0).getInt32(0, Endian.little)
+            ).buffer.asByteData(0).getUint32(0, Endian.little)
           : null;
       final isZeroNode =
           getCurrentTimelock(sequnceInt) ==
