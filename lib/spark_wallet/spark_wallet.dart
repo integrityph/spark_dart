@@ -1318,6 +1318,84 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     );
   }
 
+  Future<String> createUnsignedTokensInvoice({
+    BigInt? amount,
+    String? tokenIdentifier, // Bech32mTokenIdentifier equivalent
+    String? memo,
+    String? senderSparkAddress,
+    DateTime? expiryTime,
+  }) async {
+    // 2^128 - 1
+    final BigInt maxUint128 = BigInt.parse(
+      "340282366920938463463374607431768211455",
+    );
+
+    if (amount != null && (amount < BigInt.zero || amount > maxUint128)) {
+      throw SparkValidationError(
+        "Amount must be between 0 and $maxUint128",
+        context: {
+          "field": "amount",
+          "value": amount,
+          "expected":
+              "greater than or equal to 0 and less than or equal to $maxUint128",
+        },
+      );
+    }
+
+    Uint8List? decodedTokenIdentifier;
+    if (tokenIdentifier != null) {
+      decodedTokenIdentifier = decodeBech32mTokenIdentifier(
+        tokenIdentifier,
+        network: config.getNetwork(),
+      ).tokenIdentifier;
+    }
+
+    final protoPayment = TokensPayment(
+      tokenIdentifier: decodedTokenIdentifier,
+      amount: amount != null ? numberToVarBytesBE(amount) : null,
+    );
+
+    Uint8List? senderPublicKey;
+    if (senderSparkAddress != null) {
+      senderPublicKey = hexToBytes(
+        decodeSparkAddress(
+          senderSparkAddress,
+          config.getNetwork(),
+        ).identityPublicKey,
+      );
+    }
+
+    final invoiceFields = SparkInvoiceFields(
+      version: 1,
+      id: _generateUuidV7().toBytes(),
+      tokensPayment: protoPayment,
+      memo: memo,
+      senderPublicKey: senderPublicKey,
+      expiryTime: expiryTime != null
+          ? Timestamp.fromDateTime(expiryTime)
+          : null,
+    );
+
+    validateSparkInvoiceFields(invoiceFields);
+
+    final identityPublicKey = await config.signer.getIdentityPublicKey();
+    // final hash = hashSparkInvoice(
+    //   invoiceFields,
+    //   identityPublicKey,
+    //   config.getNetwork(),
+    // );
+    // final signature = await config.signer.signSchnorrWithIdentityKey(hash);
+
+    return encodeSparkAddressWithSignature(
+      SparkAddressData(
+        identityPublicKey: bytesToHex(identityPublicKey),
+        network: config.getNetwork(),
+        sparkInvoiceFields: invoiceFields,
+      ),
+      null,
+    );
+  }
+
   /// Using Dart 3 Records to cleanly return multiple values
   Future<({Uint8List seed, String? mnemonic, int accountNumber})>
   _resolveSeedAndMnemonic(
