@@ -9,7 +9,7 @@ import 'package:grpc/grpc.dart';
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart';
 import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 import 'package:uuid/uuid.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 import '../errors/spark_error.dart'; // SparkError, SparkRequestError, SparkValidationError
 import '../src/proto/spark.pbgrpc.dart'; // TransferStatus, TransferType, TreeNode, TransferPackage, SigningJob, ClaimTransferResponse, ClaimTransferSignRefundsResponse, CounterLeafSwapResponse, HashVariant, InitiateSwapPrimaryTransferResponse, LeafRefundTxSigningJob, LeafRefundTxSigningResult, NodeSignatures, QueryTransfersResponse, RenewNodeZeroTimelockSigningJob, RenewRefundTimelockSigningJob, SendLeafKeyTweak, SendLeafKeyTweaks, StartTransferRequest, StartTransferResponse, Transfer
@@ -582,7 +582,7 @@ class BaseTransferService {
     final payload = payloadBuilder.toBytes();
 
     // sha256 function assumed from earlier crypto utils
-    final payloadHash = bsll.sha256.hash(payload)!;
+    final payloadHash = bssl.sha256.hash(payload)!;
 
     final signature = await config.signer.signMessageWithIdentityKey(
       payloadHash,
@@ -1375,7 +1375,7 @@ class TransferService extends BaseTransferService {
       final payload = payloadBuilder.toBytes();
 
       // Assuming sha256Bytes utility matches noble/hashes output
-      final payloadHash = bsll.sha256.hash(payload)!;
+      final payloadHash = bssl.sha256.hash(payload)!;
 
       // Assuming a secp256k1 utility wrapper matches noble/curves verify mapping
 

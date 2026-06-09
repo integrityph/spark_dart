@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'dart:convert';
 
 import 'package:bech32m_i/bech32m_i.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 import '../errors/types.dart';
 import '../spark_wallet/proto-hash.dart';
@@ -44,7 +44,7 @@ Uint8List hashTokenTransaction(
 
 /// Helper to mimic the `sha256.create().update(bytes).digest()` flow.
 Uint8List _sha256(List<int> data) {
-  return Uint8List.fromList(bsll.sha256.hash(data)!);
+  return Uint8List.fromList(bssl.sha256.hash(data)!);
 }
 
 Uint8List hashTokenTransactionV1(

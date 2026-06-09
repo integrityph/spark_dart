@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:bitcoin_base/bitcoin_base.dart' hide UTXO;
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 
 import '../services/transfer.dart';
@@ -137,7 +137,7 @@ class DepositService {
       );
     }
 
-    final addrHash = bsll.sha256.hash(utf8.encode(address.address))!;
+    final addrHash = bssl.sha256.hash(utf8.encode(address.address))!;
 
     for (final operator in config.getSigningOperators().values) {
       if (operator.identifier == config.getCoordinatorIdentifier() &&

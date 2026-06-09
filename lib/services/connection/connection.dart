@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:grpc/grpc.dart';
 import 'package:uuid/uuid.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 import '../../constants.dart';
 import '../../errors/base.dart';
@@ -546,7 +546,7 @@ class ConnectionManager {
 
               // Using package:crypto for SHA256
               final hash = Uint8List.fromList(
-                bsll.sha256.hash(challengeBytes)!,
+                bssl.sha256.hash(challengeBytes)!,
               );
 
               final derSignatureBytes = await config.signer

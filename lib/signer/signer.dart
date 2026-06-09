@@ -6,7 +6,7 @@ import 'package:bitcoin_base/bitcoin_base.dart';
 import 'package:blockchain_utils/blockchain_utils.dart' hide hex;
 import 'package:collection/collection.dart';
 import 'package:convert/convert.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 
 import '../errors/spark_error.dart'; // SparkError, SparkValidationError
@@ -365,7 +365,7 @@ class DefaultSparkSigner implements SparkSigner {
   ) async {
     return switch (keyDerivation) {
       LeafKeyDerivation(:final path) => _deriveSigningKey(
-        bsll.sha256.hash(utf8.encode(path))!,
+        bssl.sha256.hash(utf8.encode(path))!,
       ),
 
       DepositKeyDerivation() => (_depositKey?.privateKey==null) ? Uint8List(0) : _depositKey!.privateKey,
@@ -510,10 +510,10 @@ class DefaultSparkSigner implements SparkSigner {
     String second,
   ) async {
     final firstPrivateKey = _deriveSigningKey(
-      Uint8List.fromList(bsll.sha256.hash(first.codeUnits)!),
+      Uint8List.fromList(bssl.sha256.hash(first.codeUnits)!),
     );
     final secondPrivateKey = _deriveSigningKey(
-      Uint8List.fromList(bsll.sha256.hash(second.codeUnits)!),
+      Uint8List.fromList(bssl.sha256.hash(second.codeUnits)!),
     );
 
     final resultPrivKey = subtractPrivateKeys(
@@ -915,7 +915,7 @@ class DefaultSparkSigner implements SparkSigner {
 
     final hmacKey = Uint8List.fromList(_htlcPreimageKey!.privateKey!);
     // final hmacObj = Hmac(sha256, hmacKey);
-    final hmac = bsll.hmac.hmacSHA256(transferID.codeUnits, hmacKey)!;
+    final hmac = bssl.hmac.hmacSHA256(transferID.codeUnits, hmacKey)!;
     return hmac;
   }
 }

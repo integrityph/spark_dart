@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:http/http.dart' as http;
 // // import 'package:crypto/crypto.dart';
 
@@ -740,7 +740,7 @@ class SspClient {
         final challengeBytes = base64.decode(base64.normalize(challenge.protectedChallenge));
         // SHA256 Hash the bytes
         final hashedBytes = Uint8List.fromList(
-          bsll.sha256.hash(challengeBytes)!,
+          bssl.sha256.hash(challengeBytes)!,
         );
 
         // Sign the hashed bytes

@@ -3,14 +3,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 // Adjust these imports to point to your actual files
 import '../src/proto/spark.pb.dart' hide Network;
 import 'network.dart';
 
 /// Helper to quickly hash a byte array
-List<int> _sha256(List<int> data) => bsll.sha256.hash(data)!;
+List<int> _sha256(List<int> data) => bssl.sha256.hash(data)!;
 
 /// Big-endian uint32 bytes
 Uint8List _uint32be(int n) {

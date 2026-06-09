@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bssl;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:collection/collection.dart';
 import 'package:convert/convert.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;

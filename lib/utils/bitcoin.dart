@@ -3,7 +3,7 @@
 import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:bitcoin_base/bitcoin_base.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 import '../errors/spark_error.dart'; // Adjust import based on your SparkValidationError
 import 'network.dart'; // Adjust import based on your Network enum
@@ -221,8 +221,8 @@ String getTxId(BtcTransaction tx) {
   return tx.txId();
   // Convert TX to bytes, double SHA256 it, and reverse the bytes
   // final rawBytes = Uint8List.fromList(hex.decode(tx.serialize()));
-  // final hash1 = bsll.sha256.hash(rawBytes)!;
-  // final hash2 = bsll.sha256.hash(hash1)!;
+  // final hash1 = bssl.sha256.hash(rawBytes)!;
+  // final hash2 = bssl.sha256.hash(hash1)!;
 
   // final reversed = Uint8List.fromList(hash2.reversed.toList());
   // return hex.encode(reversed);
@@ -230,8 +230,8 @@ String getTxId(BtcTransaction tx) {
 
 String getTxIdNoReverse(BtcTransaction tx) {
   final rawBytes = Uint8List.fromList(hex.decode(tx.serialize()));
-  final hash1 = bsll.sha256.hash(rawBytes)!;
-  final hash2 = bsll.sha256.hash(hash1)!;
+  final hash1 = bssl.sha256.hash(rawBytes)!;
+  final hash2 = bssl.sha256.hash(hash1)!;
 
   return hex.encode(hash2);
 }

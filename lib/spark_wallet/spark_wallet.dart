@@ -14,7 +14,7 @@ import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart';
 import 'package:spark_dart/spark_bindings/spark_bindings.dart';
 import 'package:spark_dart/spark_wallet/se_helper.dart';
 import 'package:spark_dart/src/rust/frb_generated.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
@@ -1928,7 +1928,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     );
 
     // Assuming sha256 is available (e.g., via package:crypto)
-    final hashBuffer = Uint8List.fromList(bsll.sha256.hash(message)!);
+    final hashBuffer = Uint8List.fromList(bssl.sha256.hash(message)!);
     final signatureBytes = await config.signer.signMessageWithIdentityKey(
       hashBuffer,
     );
@@ -2076,7 +2076,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
         creditAmountSats,
         quoteSignature,
       );
-      messageHash = Uint8List.fromList(bsll.sha256.hash(payload)!);
+      messageHash = Uint8List.fromList(bssl.sha256.hash(payload)!);
     } else {
       final staticDepositAddress = await getStaticDepositAddress();
       messageHash = _createInstantDepositUserStatement(
@@ -2142,7 +2142,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     builder.add(sspSignature);
 
     return Uint8List.fromList(
-      bsll.sha256.hash(builder.toBytes())!,
+      bssl.sha256.hash(builder.toBytes())!,
     ); // Custom wrapper over crypto.sha256
   }
 
@@ -2237,7 +2237,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
       bytesToHex(spendTxSighash),
     );
 
-    final hashBuffer = Uint8List.fromList(bsll.sha256.hash(message)!);
+    final hashBuffer = Uint8List.fromList(bssl.sha256.hash(message)!);
     final swapResponseUserSignature = await config.signer
         .signMessageWithIdentityKey(hashBuffer);
 
@@ -3891,7 +3891,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
         preimage = bytesToHex(preimageBytes);
       }
 
-      final paymentHash = bsll.sha256.hash((hexToBytes(preimage!)))!;
+      final paymentHash = bssl.sha256.hash((hexToBytes(preimage!)))!;
 
       final receiverIdentityPubkey = decodeSparkAddress(
         receiverSparkAddress,
@@ -5090,7 +5090,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     String message, [
     bool compact = false,
   ]) async {
-    final hash = Uint8List.fromList(bsll.sha256.hash(utf8.encode(message))!);
+    final hash = Uint8List.fromList(bssl.sha256.hash(utf8.encode(message))!);
     final signature = await config.signer.signMessageWithIdentityKey(
       hash,
       compact: compact,
@@ -5102,7 +5102,7 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     String message,
     dynamic signature,
   ) async {
-    final hash = Uint8List.fromList(bsll.sha256.hash(utf8.encode(message))!);
+    final hash = Uint8List.fromList(bssl.sha256.hash(utf8.encode(message))!);
     Uint8List sigBytes;
     if (signature is String) {
       sigBytes = hexToBytes(signature);

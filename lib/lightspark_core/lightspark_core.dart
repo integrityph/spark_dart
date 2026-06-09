@@ -8,7 +8,7 @@ import 'dart:async';
 import 'dart:io'; // For zlib compression
 import 'package:http/http.dart' as http;
 import 'package:graphql/client.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bssl;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 
 export '../utils/hex.dart' show bytesToHex, hexToBytes;

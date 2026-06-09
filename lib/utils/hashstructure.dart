@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bsll;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 
 /// Compares two byte lists using byte-wise lexicographic comparison
 /// for consistent cross-platform string ordering.
@@ -24,7 +24,7 @@ class Hasher {
   /// Creates a new Hasher with the given hierarchical domain tag.
   /// The hash is computed using the BIP-340 tagged hash pattern.
   static Hasher newHasher(List<String> tag) {
-    final tagHash = bsll.sha256.hash(_serializeTag(tag))!;
+    final tagHash = bssl.sha256.hash(_serializeTag(tag))!;
 
     // Write tagHash || tagHash as per BIP-340 tagged hash pattern
     final obj = Hasher();
@@ -123,7 +123,7 @@ class Hasher {
 
   /// Computes and returns the final SHA256 hash.
   Uint8List hash() {
-    return bsll.sha256.hash(sink)!;
+    return bssl.sha256.hash(sink)!;
   }
 }
 

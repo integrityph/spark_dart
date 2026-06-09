@@ -4,7 +4,7 @@ import 'package:convert/convert.dart';
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:flutter/widgets.dart';
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart';
-import 'package:boringssl_ffi/boringssl_ffi.dart' as bssl;
+import 'package:boringssl_ffi/boringssl_ffi.dart';
 import 'package:secp256k1_ffi/secp256k1_ffi.dart';
 import 'package:uuid/uuid.dart';
 
