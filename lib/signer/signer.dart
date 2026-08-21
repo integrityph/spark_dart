@@ -240,6 +240,7 @@ abstract class SparkSigner {
   Future<Uint8List> signFrost(SignFrostParams params);
   Future<Uint8List> aggregateFrost(AggregateFrostParams params);
   Future<Uint8List> decryptEcies(Uint8List ciphertext);
+  Future<Uint8List> decryptEciesToPrivateKey(Uint8List ciphertext);
   Future<SigningCommitmentWithOptionalNonce> getRandomSigningCommitment();
 
   SigningNonce? getNonceForSelfCommitment(
@@ -347,7 +348,7 @@ class DefaultSparkSigner implements SparkSigner {
     return newPrivateKey;
   }
 
-  Future<Uint8List> _decryptEciesToPrivateKey(Uint8List ciphertext) async {
+  Future<Uint8List> decryptEciesToPrivateKey(Uint8List ciphertext) async {
     if (_identityKey?.privateKey == null) {
       throw SparkError("identityKey not initialized");
     }
@@ -374,7 +375,7 @@ class DefaultSparkSigner implements SparkSigner {
         path,
       ),
 
-      EciesKeyDerivation(:final path) => _decryptEciesToPrivateKey(path),
+      EciesKeyDerivation(:final path) => decryptEciesToPrivateKey(path),
 
       RandomKeyDerivation() => _generateRandomPrivateKey(),
 
