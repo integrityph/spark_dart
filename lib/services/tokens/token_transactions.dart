@@ -777,8 +777,6 @@ class TokenTransactionService {
           key,
         );
 
-        debugPrint("braodcastTokenTransactionV3Detailed ownerSignature (${ownerSignature.length}) :${hex.encode(ownerSignature)}, hash(${partialTokenTransactionHash.length}): ${hex.encode(partialTokenTransactionHash)} key: ${hex.encode(key)}");
-
         ownerSignaturesWithIndex.add(
           SignatureWithIndex(signature: ownerSignature, inputIndex: i),
         );

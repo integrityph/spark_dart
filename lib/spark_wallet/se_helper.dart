@@ -55,7 +55,6 @@ class SEHelper {
 
     // put thigs back in keyset
     final decryptedBytes = base64Decode(result.decryptedData!);
-    print("decryptedBytes: (${decryptedBytes.length}) ${hex.encode(decryptedBytes)}");
     for (int i=0; i<keyset.length; i++) {
       keyset[i] = (
         privateKey: decryptedBytes.sublist(i*privateKeyLength, (i+1)*privateKeyLength),
@@ -133,8 +132,6 @@ class SEHelper {
     
     final encryptedBytes = Uint8List.fromList(payloadParts.expand((x) => x).toList());
     final encryptedKeyset = keyset.toList();
-
-    print("encryptedBytes: (${encryptedBytes.length})");
 
     final prefixLength = publicKeyLength + nonceLength;
     final privateKeyLengthHex = 44;

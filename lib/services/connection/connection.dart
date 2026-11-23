@@ -178,7 +178,6 @@ class ConnectionManager {
       expiresAtMono: getMonotonicTime() + ttlMs,
       expiresAtWallMs: DateTime.now().millisecondsSinceEpoch + ttlMs,
     );
-    print("token cached for $address $identityHex under key $tokenKey");
   }
 
   static void _invalidateCachedAuthToken(Address address, String identityHex) {
@@ -198,7 +197,6 @@ class ConnectionManager {
   ) async {
     final cached = _getCachedAuthToken(address, identityHex);
     if (cached != null) {
-      print("_getOrCreateAuthToken returned from cache $cached");
       return cached;
     }
 
@@ -502,8 +500,6 @@ class ConnectionManager {
   Future<String> authenticate(String address) async {
     final identityHex = await _getIdentityPublicKeyHex();
 
-    print("authenticate identityHex: $identityHex");
-
     return await ConnectionManager._getOrCreateAuthToken(
       address,
       identityHex,
@@ -560,8 +556,6 @@ class ConnectionManager {
                   publicKey: identityPublicKey,
                 ),
               );
-
-              print("verifyResp.sessionToken: ${verifyResp.sessionToken}");
 
               return (
                 token: verifyResp.sessionToken,

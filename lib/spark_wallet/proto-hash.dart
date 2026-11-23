@@ -98,67 +98,7 @@ class ProtoHasher {
   ProtoHasher();
 
   Future<Uint8List> hashProto(GeneratedMessage message) async {
-    // PartialTokenTransaction x = PartialTokenTransaction();
-    // debugPrint("SERIALIZED 1:: ${hex.encode(x.writeToBuffer())}");
-    // Uint8List xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 1 HASH: ${hex.encode(xHash)}");
-
-    // x.version = 1;
-    // debugPrint("SERIALIZED 2: ${hex.encode(x.writeToBuffer())}");
-    // xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 2 HASH: ${hex.encode(xHash)}");
-
-    // TokenTransactionMetadata t = TokenTransactionMetadata();
-    // final opPubKey = Uint8List.fromList(hex.decode("03dfbdff4b6332c220f8fa2ba8ed496c698ceada563fa01b67d9983bfc5c95e763"));
-    // t.sparkOperatorIdentityPublicKeys.add(opPubKey);
-    // t.network = Network.MAINNET;
-    // t.clientCreatedTimestamp = Timestamp.fromDateTime(DateTime.parse("2026-01-01T01:01:01Z"));
-    // t.validityDurationSeconds = $fixnum.Int64(5);
-    // x.version = 1;
-    // x.tokenTransactionMetadata = t;
-    // debugPrint("SERIALIZED 3: ${hex.encode(x.writeToBuffer())}");
-    // xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 3 HASH: ${hex.encode(xHash)}");
-
-    // InvoiceAttachment inv = InvoiceAttachment();
-    // inv.sparkInvoice = "spark1pgssxln7e7sdfkpml5u5rj54m3m8ke929xkecrwz9fmm3wux8ua2t83p5wzw73";
-    // t.invoiceAttachments.add(inv);
-    // x.version = 1;
-    // x.tokenTransactionMetadata = t;
-    // TokenTransferInput txIn = TokenTransferInput();
-    // txIn.outputsToSpend.add(
-    //   TokenOutputToSpend(
-    //     prevTokenTransactionHash: hex.decode("7e7ecfa0d4d83bfd3941ca95dc767b64aa29ad9c0dc22a77b8bb863f3aa59e21"),
-    //     prevTokenTransactionVout: 0,
-    //   ),
-    // );
-    // x.transferInput = txIn;
-    // debugPrint("SERIALIZED 4: ${hex.encode(x.writeToBuffer())}");
-    // xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 4 HASH: ${hex.encode(xHash)}");
-
-    // PartialTokenOutput txOut0 = PartialTokenOutput();
-    // txOut0.ownerPublicKey = hex.decode("037e7ecfa0d4d83bfd3941ca95dc767b64aa29ad9c0dc22a77b8bb863f3aa59e21");
-    // txOut0.withdrawBondSats = $fixnum.Int64(100000);
-    // txOut0.withdrawRelativeBlockLocktime = $fixnum.Int64(1000);
-    // txOut0.tokenIdentifier = hex.decode("3206c93b24a4d18ea19d0a9a213204af2c7e74a6d16c7535cc5d33eca4ad1eca");
-    // txOut0.tokenAmount = List.filled(16, 0)..[0]=15;
-    // x.partialTokenOutputs.add(txOut0);
-    // debugPrint("SERIALIZED 5: ${hex.encode(x.writeToBuffer())}");
-    // xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 5 HASH: ${hex.encode(xHash)}");
-
-    // x.executeBefore = Timestamp.fromDateTime(DateTime.parse("2026-01-01T02:02:02"));
-    // debugPrint("SERIALIZED 6: ${hex.encode(x.writeToBuffer())}");
-    // xHash = await _hashMessage(x);
-    // debugPrint("SERIALIZED 6 HASH: ${hex.encode(xHash)}");
-
-
-    // debugPrint("SERIALIZED: (${x.runtimeType}): ${hex.encode(message.writeToBuffer())}");
     final hash = await _hashMessage(message);
-    // debugPrint("SERIALIZED HASH: ${hex.encode(hash)}");
-
-    // throw Exception("STOP HERE");
     return hash;
   }
 
@@ -202,8 +142,6 @@ class ProtoHasher {
       final int fieldType = f.type;
       final dynamic fieldValue = protoMessage.getField(fieldNumber);
       final dynamic defaultFieldValue = protoMessage.getDefaultForField(fieldNumber);
-
-      debugPrint("Pre-Processing field: fieldNumber:$fieldNumber, fieldName:$fieldName, fieldType:$fieldType, fieldValue:$fieldValue, defaultFieldValue:$defaultFieldValue");
     
       // Check if field is present (has a value)
       if (isDefault(fieldValue, fieldType, defaultFieldValue)) {
@@ -221,14 +159,10 @@ class ProtoHasher {
         continue;
       }
 
-      debugPrint("Processing field: fieldNumber:$fieldNumber, fieldName:$fieldName, fieldType:$fieldType, fieldValue:$fieldValue");
-
       fieldHashes.add(
         FieldHashEntry(number: fieldNumber, khash: khash, vhash: vhash),
       );
     }
-
-    debugPrint("FIEEELDS: ${fieldHashes.length}}");
 
     // Sort by field number for deterministic ordering
     fieldHashes.sort((a, b) => a.number.compareTo(b.number));
@@ -355,59 +289,6 @@ class ProtoHasher {
         throw Exception("Unknown base type: $baseType (from pbFieldType: $pbFieldType)");
     }
   }
-
-  // Future<Uint8List> _hashValue(dynamic fieldType, dynamic value) async {
-  //   final typeName = getTypeName(fieldType).toLowerCase();
-
-  //   if (value is $fixnum.Int64) {
-  //     return hashInt64(BigInt.parse(value.toString()));
-  //   } else if (value is ProtobufEnum) {
-  //     return hashInt64(value.value);
-  //   }
-
-  //   switch (typeName) {
-  //     case "bool":
-  //       return hashBool(value as bool);
-  //     case "int32":
-  //     case "int64":
-  //     case "sint32":
-  //     case "sint64":
-  //     case "sfixed32":
-  //     case "sfixed64":
-  //       return hashInt64(value);
-  //     case "uint32":
-  //     case "uint64":
-  //     case "fixed32":
-  //     case "fixed64":
-  //       return hashUint64(value);
-  //     case "float":
-  //     case "double":
-  //       // Dart handles TS 'number' as int or double; cast to num to safely get double
-  //       return hashFloat((value as num).toDouble());
-  //     case "string":
-  //       return hashUnicode(value as String);
-  //     case "bytes":
-  //       return hashBytes(Uint8List.fromList(value as List<int>));
-  //     case "message":
-  //       debugPrint("This is a message ($typeName): ${value}, ${value.runtimeType}");
-  //       // Catch enums that were misclassified as messages because they possess a typeName
-  //       if (fieldType is Map && fieldType['typeName'] != null) {
-  //         return await _hashMessage(value, fieldType['typeName'] as String);
-  //       }
-  //       return await _hashMessage(value);
-  //     case "oneof":
-  //       return await _hashOneof(value);
-  //     default:
-  //       // Handle enums as integers
-  //       if (value is ProtobufEnum) {
-  //         return hashInt64(value.value); // .value gets the integer
-  //       }
-  //       if (value is int) { // Keep just in case you manually pass an int
-  //         return hashInt64(value);
-  //       }
-  //       throw Exception("Unsupported field type: $typeName");
-  //   }
-  // }
 
   Future<Uint8List> _hashOneof(dynamic oneofValue) async {
     // For protoc-gen-ts_proto generated types (or JSON maps representing them),
@@ -663,134 +544,6 @@ class ProtoHasher {
     return Uint8List.fromList(bssl.sha256.hash(concatenatedData)!);
   }
 
-  // Generic protobuf field introspection using real protobuf field numbers
-  // Map<int, dynamic> getMessageFields(
-  //   GeneratedMessage message, [
-  //   String? messageTypeName,
-  // ]) {
-  //   final fields = <int, dynamic>{};
-
-  //   // Use descriptor-based numbers when a message type name is provided.
-  //   // Assumes getFieldNumbers and getFieldMeta are defined elsewhere and return Map<String, dynamic>
-  //   // final Map<String, int> reflectionNumbers = messageTypeName != null
-  //   //     ? getFieldNumbers(messageTypeName)
-  //   //     : {};
-  //   // final Map<String, FieldMeta> fieldMeta = messageTypeName != null
-  //   //     ? getFieldMeta(messageTypeName)
-  //   //     : {};
-
-  //   // print("reflectionNumbers ${reflectionNumbers}");
-
-  //   String camelToSnake(String name) {
-  //     return name
-  //         .replaceAllMapped(RegExp(r'([A-Z])'), (m) => '_${m.group(1)}')
-  //         .replaceFirst(RegExp(r'^_'), '')
-  //         .toLowerCase();
-  //   }
-
-  //   // Track used field numbers to avoid conflicts
-  //   final usedTags = <int>{};
-  //   List<FieldInfo<dynamic>> fieldList = message.info_.byIndex.toList();
-
-  //   for (final f in fieldList) {
-  //     final fieldName = f.name;
-  //     final tag = f.tagNumber;
-  //     if (!message.hasField(tag)) {
-  //       // Repeated fields return false for hasField, so we check if the list is empty
-  //       if (f.isRepeated) {
-  //         final list = message.getField(tag) as List;
-  //         if (list.isEmpty) continue;
-  //       } else {
-  //         continue; // It's a standard scalar/message that is genuinely unset
-  //       }
-  //     }
-  //     dynamic value = message.getFieldOrNull(tag);
-
-  //     // Handle oneof fields specially
-  //     if (isOneofField(value)) {
-  //       final oneofInfo = extractOneofField(
-  //         fieldName,
-  //         value,
-  //         reflectionNumbers,
-  //       );
-  //       if (oneofInfo != null) {
-  //         final actualFieldNumber = oneofInfo['actualFieldNumber'] as int;
-  //         final actualFieldName = oneofInfo['actualFieldName'] as String;
-  //         final actualValue = oneofInfo['actualValue'];
-
-  //         usedTags.add(actualFieldNumber);
-
-  //         final snakeCase = camelToSnake(actualFieldName);
-  //         final meta = fieldMeta[snakeCase];
-  //         final nestedTypeName = meta?.typeName;
-  //         final inferred = inferFieldType(actualValue);
-
-  //         final typeWithHint = nestedTypeName != null
-  //             ? {"type": "message", "typeName": nestedTypeName}
-  //             : inferred;
-
-  //         fields[actualFieldNumber] = {
-  //           "name": actualFieldName,
-  //           "type": typeWithHint,
-  //           "protoType": null, // TODO !!!!!!!
-  //           "value": actualValue,
-  //         };
-  //       }
-  //       continue;
-  //     }
-
-  //     usedTags.add(tag);
-
-  //     if (value != null) {
-  //       // final snakeCase = camelToSnake(fieldName);
-  //       // final meta = fieldMeta[snakeCase];
-  //       final bool isRepeated = f.isRepeated; // meta?.repeated == true;
-  //       final int fieldType = f.type; // meta?.type;
-  //       final nestedTypeName = meta?.typeName;
-
-  //       // Build the field type descriptor
-  //       dynamic typeDescriptor;
-  //       if (isRepeated && value is List) {
-  //         // For repeated fields, create a descriptor with element type info
-  //         final elementType = protoTypeToFieldType(fieldType, nestedTypeName);
-  //         typeDescriptor = {"type": "repeated", "elementType": elementType};
-  //       } else if (nestedTypeName != null) {
-  //         typeDescriptor = {"type": "message", "typeName": nestedTypeName};
-  //       } else {
-  //         typeDescriptor = inferFieldType(value);
-  //       }
-
-  //       // if (value is ProtobufEnum) { // typeEnum = 14
-  //       //   value = (value as ProtobufEnum).value;
-  //       // }
-
-  //       fields[tag] = {
-  //         "name": fieldName,
-  //         "type": typeDescriptor,
-  //         "protoType": f.type,
-  //         "value": value,
-  //       };
-  //     }
-  //   }
-
-  //   if (fields.isEmpty) {
-  //     final dbgReflectionKeys = reflectionNumbers.keys.toList();
-  //     print(
-  //       "proto-hash: no fields found. "
-  //       "messageTypeName: $messageTypeName, "
-  //       "reflectionKeys: $dbgReflectionKeys, "
-  //       "messageKeys: ${fieldList.map((v)=>v.name)}",
-  //     );
-  //     throw Exception(
-  //       "No fields found in message (missing or invalid messageTypeName)",
-  //     );
-  //   }
-
-  //   debugPrint("getFields.fields: ${fields.toString().replaceAll("\n", "")}");
-
-  //   return fields;
-  // }
-
   dynamic protoTypeToFieldType(int? protoType, [String? typeName]) {
     const typeDouble = 1;
     const typeFloat = 2;
@@ -993,7 +746,6 @@ class ProtoHasher {
       }
       // Standard Messages are never considered default when present
       final equal =  ListEquality().equals(value.writeToBuffer(), (defaultValue as GeneratedMessage).writeToBuffer());
-      debugPrint("messages are equal: $equal, 1: ${hex.encode(value.writeToBuffer())} 2: ${hex.encode(defaultValue.writeToBuffer())}");
       return equal;
     }
 

@@ -957,7 +957,6 @@ class Requester {
     }
 
     final responseJson = jsonDecode(response.body) as Map<String, dynamic>;
-    print("SparkSDK GraphQL responseJson: ${responseJson}");
     final data = responseJson['data'];
 
     if (data == null) {

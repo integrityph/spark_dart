@@ -181,7 +181,6 @@ class LeafManager {
 
   Future<void> sync() async {
     _identityPublicKey = await config.signer.getIdentityPublicKey();
-
     final prevBalanceCount = _leaves.length;
     final prevAvailable = getAvailableBalance();
     final prevOwned = getOwnedBalance();
@@ -213,7 +212,6 @@ class LeafManager {
             >; // Expecting {leaf: TreeNode, transferId: String}
     final incomingTransfers =
         results[3] as dynamic; // Assumed QueryTransfersResponse
-
     final incomingList = (incomingTransfers.transfers as List).cast<Transfer>();
 
     _log(
@@ -331,7 +329,6 @@ class LeafManager {
     }
 
     final operatorToLeaves = <String, QueryNodesResponse>{};
-
     final fetchFutures = operators.map((entry) async {
       final id = entry.key;
 
@@ -345,7 +342,6 @@ class LeafManager {
       );
       operatorToLeaves[id] = leaves;
     }).toList();
-
     await Future.wait(fetchFutures);
 
     final coordinatorLeaves = operatorToLeaves[coordinatorId];
@@ -418,7 +414,6 @@ class LeafManager {
           ? (type: "VALID", leaf: leaf, path: null)
           : (type: "INVALID", leaf: null, path: null);
     }).toList();
-
     final actions = await Future.wait(actionFutures);
 
     final validLeaves = <TreeNode>[];
@@ -437,7 +432,6 @@ class LeafManager {
     // Recovery is awaited so recovered leaves are included in results.
     // A failed recovery doesn't drop already-collected valid leaves.
     final finalLeaves = List<TreeNode>.from(validLeaves);
-
     for (final entry in recoverByPath.entries) {
       final path = entry.key;
       final leavesToRecover = entry.value;
@@ -1243,16 +1237,6 @@ class LeafManager {
     List<BigInt> targetAmounts,
   ) {
     final availableLeaves = _getAvailableLeaves();
-    debugPrint("Phase 0 _selectLeaves availableLeaves");
-    for (final (index,v) in availableLeaves.indexed) {
-      debugPrint("$index: ${v.id}");
-      debugPrint("directFromCpfpRefundTx: ${hex.encode(v.directFromCpfpRefundTx)}");
-      debugPrint("directRefundTx: ${hex.encode(v.directRefundTx)}");
-      debugPrint("directTx: ${hex.encode(v.directTx)}");
-      debugPrint("nodeTx: ${hex.encode(v.nodeTx)}");
-      debugPrint("refundTx: ${hex.encode(v.refundTx)}");
-
-    }
     final sorted = List<TreeNode>.from(availableLeaves)
       ..sort((a, b) => b.value.compareTo(a.value)); // Descending order
 
@@ -1858,6 +1842,7 @@ class LeafManager {
   }
 
   Future<List<Map<String, dynamic>>> _getAllPendingSwaps() async {
+    final sw = Stopwatch()..start();
     List<Map<String, dynamic>> extractLeaves(dynamic transfer) {
       final results = <Map<String, dynamic>>[];
       for (final leafWrapper in transfer.leaves) {
@@ -1898,16 +1883,19 @@ class LeafManager {
     final primarySwaps = futures[0];
     final counterSwaps = futures[1];
 
+    sw.stop();
     return [...primarySwaps, ...counterSwaps];
   }
 
   Future<List<Map<String, dynamic>>> _getAllPendingOutgoingTransfers() async {
     return _paginateTransfers(
       (params) async {
+        final sw = Stopwatch()..start();
         final response = await transferService.queryCounterSwapTransfers(
           TransferQueryOptions(limit: params.limit, offset: params.offset),
         );
 
+        sw.stop();
         return (offset: response.offset.toInt(), transfers: response.transfers);
       },
       (transfer) {
@@ -1992,8 +1980,9 @@ class LeafManager {
     Uint8List pubkey2,
     Uint8List verifyingKey,
   ) {
-    // Requires equalBytes from your assumed crypto utility mappings
-    return ListEquality().equals(addPublicKeys(pubkey1, pubkey2), verifyingKey);
+    final result = ListEquality().equals(addPublicKeys(pubkey1, pubkey2), verifyingKey);
+    // sw.stop;
+    return result;
   }
 
   bool _isLeafConsistent(TreeNode leaf, TreeNode? opLeaf) {

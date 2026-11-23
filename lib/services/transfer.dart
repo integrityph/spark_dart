@@ -1237,18 +1237,21 @@ class TransferService extends BaseTransferService {
   Future<QueryTransfersResponse> queryPendingTransfers([
     List<String>? transferIds,
   ]) async {
+    final sw = Stopwatch()..start();
     final sparkClient = await connectionManager.createSparkClient(
       config.getCoordinatorAddress(),
     );
 
     try {
-      return await sparkClient.query_pending_transfers(
+      final result = await sparkClient.query_pending_transfers(
         TransferFilter(
           receiverIdentityPublicKey: await config.signer.getIdentityPublicKey(),
           transferIds: transferIds ?? [],
           network: Network.valueOf(config.getNetworkProto()),
         ),
       );
+      sw.stop();
+      return result;
     } catch (error) {
       throw Exception("Error querying pending transfers: $error");
     }

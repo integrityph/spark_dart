@@ -349,23 +349,15 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
       throw err;
     }
 
-    print("Spark.initialize 1");
-
     // Check if the keyset is encrypted
     final isEncrypted = SEHelper.isKeysetEncrypted(props?.keyset);
-
-    print("Spark.initialize 2 ${isEncrypted}");
 
     // decrypt the keyset
     List<({Uint8List chainCode, String path, Uint8List privateKey})>? encryptedKeyset;
     if (isEncrypted) {
-      print("Spark.initialize 3 ${isEncrypted}");
       await SEHelper.decryptKeyset(props!.keyset!);
-      print("Spark.initialize 4 ${isEncrypted}");
     } else if (props?.keyset != null && (props?.encryptAndStoreInSE ?? false)) {
-      print("Spark.initialize 3.1 ${isEncrypted}");
       encryptedKeyset = await SEHelper.encryptKeyset(props!.keyset!);
-      print("Spark.initialize 4.1 ${isEncrypted}");
     }
 
     // Directly call the initialization logic
@@ -3794,15 +3786,6 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
       selected,
     ) async {
       final leaves = selected[0];
-      debugPrint("Phase 1 -- leaves selection");
-      for (final (index, v) in leaves.indexed){
-        debugPrint("$index: ${v.id}");
-        debugPrint("directFromCpfpRefundTx: ${hex.encode(v.directFromCpfpRefundTx)}");
-        debugPrint("directRefundTx: ${hex.encode(v.directRefundTx)}");
-        debugPrint("directTx: ${hex.encode(v.directTx)}");
-        debugPrint("nodeTx: ${hex.encode(v.nodeTx)}");
-        debugPrint("refundTx: ${hex.encode(v.refundTx)}");
-      }
       final sspIdentityPubkey = hexToBytes(config.getSspIdentityPublicKey());
 
       final leavesToSend = leaves
@@ -4699,8 +4682,6 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     if (feeEstimate == null) {
       throw Exception("Failed to get lightning send fee estimate");
     }
-
-    print("feeEstimate.feeEstimate.originalUnit: ${feeEstimate.feeEstimate.originalUnit}");
 
     switch (feeEstimate.feeEstimate.originalUnit) {
       case CurrencyUnit.satoshi:

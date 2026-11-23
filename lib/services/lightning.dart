@@ -269,21 +269,6 @@ class LightningService {
     final directFromCpfpLeafSigningJobs =
         signRefundsResult.directFromCpfpLeafSigningJobs;
 
-    debugPrint("cpfpLeafSigningJobs list");
-    for (final (index, v) in cpfpLeafSigningJobs.indexed) {
-      debugPrint("$index: ${hex.encode(v.job.rawTx)}");
-    }
-
-    debugPrint("directLeafSigningJobs list");
-    for (final (index, v) in directLeafSigningJobs.indexed) {
-      debugPrint("$index: ${hex.encode(v.job.rawTx)}");
-    }
-
-    debugPrint("directFromCpfpLeafSigningJobs list");
-    for (final (index, v) in directFromCpfpLeafSigningJobs.indexed) {
-      debugPrint("$index: ${hex.encode(v.job.rawTx)}");
-    }
-
     final transferId = params.transferID ?? _uuid.v7();
     String bolt11String = "";
     BigInt amountSats = BigInt.zero;

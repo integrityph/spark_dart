@@ -438,15 +438,18 @@ class DefaultSparkSigner implements SparkSigner {
   Future<Uint8List> getStaticDepositSigningKey(int idx) async {
     final staticDepositKey = await getStaticDepositSecretKey(idx);
 
-    // 1. Load the raw bytes into a secp256k1 private key object
-    final privateKey = ECPrivate.fromBytes(staticDepositKey);
+    // // 1. Load the raw bytes into a secp256k1 private key object
+    // final privateKey = ECPrivate.fromBytes(staticDepositKey);
 
-    // 2. Derive the public key
-    final publicKey = privateKey.getPublic();
+    // // 2. Derive the public key
+    // final publicKey = privateKey.getPublic();
 
-    // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
-    // public key, perfectly matching the TS @noble/curves default!
-    return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+    // // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
+    // // public key, perfectly matching the TS @noble/curves default!
+    // return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+
+    final result = secp256k1FFI.privateKey.createPubKey(staticDepositKey);
+    return result!;
   }
 
   @override
@@ -493,16 +496,11 @@ class DefaultSparkSigner implements SparkSigner {
   Future<Uint8List> getPublicKeyFromDerivation({
     KeyDerivation? keyDerivation,
   }) async {
+    // final sw = Stopwatch()..start();
     if (keyDerivation == null) throw ArgumentError("keyDerivation required");
     final privateKey = await _getSigningPrivateKeyFromDerivation(keyDerivation);
-    final privateKeyObj = ECPrivate.fromBytes(privateKey);
-
-    // 2. Derive the public key
-    final publicKey = privateKeyObj.getPublic();
-
-    // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
-    // public key, perfectly matching the TS @noble/curves default!
-    return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+    final result = secp256k1FFI.privateKey.createPubKey(privateKey);
+    return result!;
   }
 
   @override
@@ -521,14 +519,17 @@ class DefaultSparkSigner implements SparkSigner {
       firstPrivateKey,
       secondPrivateKey,
     );
-    final privateKeyObj = ECPrivate.fromBytes(resultPrivKey);
+    // final privateKeyObj = ECPrivate.fromBytes(resultPrivKey);
 
-    // 2. Derive the public key
-    final publicKey = privateKeyObj.getPublic();
+    // // 2. Derive the public key
+    // final publicKey = privateKeyObj.getPublic();
 
-    // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
-    // public key, perfectly matching the TS @noble/curves default!
-    return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+    // // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
+    // // public key, perfectly matching the TS @noble/curves default!
+    // return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+
+    final result = secp256k1FFI.privateKey.createPubKey(resultPrivKey);
+    return result!;
   }
 
   @override
@@ -741,14 +742,16 @@ class DefaultSparkSigner implements SparkSigner {
       ciphertext,
       _identityKey!.privateKey,
     );
-    final privateKeyObj = ECPrivate.fromBytes(privateKey);
+    // final privateKeyObj = ECPrivate.fromBytes(privateKey);
 
-    // 2. Derive the public key
-    final publicKey = privateKeyObj.getPublic();
+    // // 2. Derive the public key
+    // final publicKey = privateKeyObj.getPublic();
 
-    // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
-    // public key, perfectly matching the TS @noble/curves default!
-    return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+    // // 3. .toCompressedBytes() explicitly returns the 33-byte compressed
+    // // public key, perfectly matching the TS @noble/curves default!
+    // return Uint8List.fromList(publicKey.toBytes(mode: PubKeyModes.compressed));
+    final result = secp256k1FFI.privateKey.createPubKey(privateKey);
+    return result!;
   }
 
   @override

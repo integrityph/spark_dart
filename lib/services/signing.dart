@@ -193,8 +193,6 @@ class SigningService {
             currentSequence,
           ).buffer.asByteData(0).getUint32(0, Endian.little);
 
-      debugPrint("RefundTx before creating the next one: tx: ${hex.encode(leaf.leaf.refundTx)} currentSequence: ${currentSequence} currentSequenceInt: ${currentSequenceInt}");
-
       final refundTxs = await createRefundTxs(
         RefundTxWithSequenceParams(
           nodeTx: nodeTx,
