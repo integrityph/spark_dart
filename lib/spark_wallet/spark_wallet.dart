@@ -15,6 +15,7 @@ import 'package:spark_dart/spark_bindings/spark_bindings.dart';
 import 'package:spark_dart/spark_wallet/se_helper.dart';
 import 'package:spark_dart/src/rust/frb_generated.dart';
 import 'package:boringssl_ffi/boringssl_ffi.dart';
+import 'package:spark_dart/src/rust/rust_init.dart';
 import 'package:uuid/uuid.dart';
 import 'package:http/http.dart' as http;
 
@@ -332,7 +333,8 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
   static Future<InitWalletResponse> initialize({
     SparkWalletProps? props,
   }) async {
-    await RustLib.init();
+    // await RustLib.init();
+    await initRustLib();
     setupSparkFrost();
 
     final options = props?.options ?? ConfigOptions();
@@ -385,7 +387,8 @@ class SparkWallet extends EventEmitter implements ISparkWallet {
     required SparkWalletProps props,
     bool forceReinit = false,
   }) async {
-    await RustLib.init();
+    // await RustLib.init();
+    await initRustLib();
     setupSparkFrost();
     
     final options = props.options ?? ConfigOptions();
