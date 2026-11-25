@@ -35,11 +35,11 @@ dependencies:
   secp256k1_ffi:
     git:
       url: https://github.com/integrityph/secp256k1_ffi
-      ref: v0.1.2
+      ref: c3576f42a02bd626e4b89b1535ca4eb8b6cfa15e
   bip32_key_derivation:
     git:
       url: https://github.com/integrityph/bip32_key_derivation
-      ref: v0.1.4
+      ref: 218d749c846ab10fff8327900d19b15263839a00
   biometric_signature: ^12.0.0
 
 dev_dependencies:

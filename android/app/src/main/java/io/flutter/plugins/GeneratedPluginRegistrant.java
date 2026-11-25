@@ -21,11 +21,6 @@ public final class GeneratedPluginRegistrant {
       Log.e(TAG, "Error registering plugin biometric_signature, com.visionflutter.biometric_signature.BiometricSignaturePlugin", e);
     }
     try {
-      flutterEngine.getPlugins().add(new com.example.bip32_key_derivation.Bip32KeyDerivationPlugin());
-    } catch (Exception e) {
-      Log.e(TAG, "Error registering plugin bip32_key_derivation, com.example.bip32_key_derivation.Bip32KeyDerivationPlugin", e);
-    }
-    try {
       flutterEngine.getPlugins().add(new dev.flutter.plugins.integration_test.IntegrationTestPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin integration_test, dev.flutter.plugins.integration_test.IntegrationTestPlugin", e);
@@ -34,6 +29,11 @@ public final class GeneratedPluginRegistrant {
       flutterEngine.getPlugins().add(new com.example.secp256k1_ffi.Secp256k1FfiPlugin());
     } catch (Exception e) {
       Log.e(TAG, "Error registering plugin secp256k1_ffi, com.example.secp256k1_ffi.Secp256k1FfiPlugin", e);
+    }
+    try {
+      flutterEngine.getPlugins().add(new com.example.bip32_key_derivation.Bip32KeyDerivationPlugin());
+    } catch (Exception e) {
+      Log.e(TAG, "Error registering plugin bip32_key_derivation, com.example.bip32_key_derivation.Bip32KeyDerivationPlugin", e);
     }
   }
 }
